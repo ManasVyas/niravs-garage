@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginUser, logoutUser, signupUser } from "../../api/authApi";
+import {
+  loginUser,
+  logoutUser,
+  signupUser,
+  updateUser,
+} from "../../api/authApi";
 
 const initialState = {
   loading: false,
@@ -44,6 +49,18 @@ const authSlice = createSlice({
       state.loggedInUser = {};
       state.error = "";
       localStorage.removeItem("token");
+    });
+    builder.addCase(updateUser.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updateUser.fulfilled, (state, action) => {
+      state.loading = false;
+      state.loggedInUser = action.payload.data;
+      state.error = "";
+    });
+    builder.addCase(updateUser.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error;
     });
   },
 });

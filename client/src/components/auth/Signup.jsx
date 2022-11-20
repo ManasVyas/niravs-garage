@@ -19,16 +19,6 @@ import Swal from "sweetalert2";
 export const Signup = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const roles = [
-    {
-      label: "Admin",
-      value: "admin",
-    },
-    {
-      label: "Customer",
-      value: "customer",
-    },
-  ];
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -48,6 +38,17 @@ export const Signup = () => {
       Swal.fire("ERROR!", "User Already Exists. Please try again!", "error");
     }
   };
+
+  const roles = [
+    {
+      label: "Admin",
+      value: "admin",
+    },
+    {
+      label: "Customer",
+      value: "customer",
+    },
+  ];
 
   return (
     <Container component="main" maxWidth="xs">

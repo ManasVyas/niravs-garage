@@ -32,7 +32,15 @@ const updateUser = async (req, res) => {
     const user = await userDao.findUserById(req.body._id);
     if (!user)
       return res.status(401).json({ success: false, msg: "User not found!" });
-    const data = await userDao.updateUser(req.body, user.hash, user.salt);
+    let data;
+    if (req.body.password) {
+      const saltHash = passportUtils.genPassword(req.body.password);
+      const salt = saltHash.salt;
+      const hash = saltHash.hash;
+      const data = await userDao.updateUser(req.body, hash, salt);
+      return res.status(200).json({ success: true, data });
+    }
+    data = await userDao.updateUser(req.body, user.hash, user.salt);
     res.status(200).json({ success: true, data });
   } catch (error) {
     res.status(500).json({ success: false, msg: error.message });

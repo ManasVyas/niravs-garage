@@ -10,6 +10,7 @@ import { About } from "./components/about/About";
 import { Signup } from "./components/auth/Signup";
 import { Login } from "./components/auth/Login";
 import { NotFound } from "./components/404/NotFound";
+import { Profile } from "./components/user/Profile";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/about" element={<About />} exact />
         <Route path="/signup" element={<Signup />} exact />
         <Route path="/login" element={<Login />} exact />
+        <Route path="/profile" element={<Profile />} exact />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

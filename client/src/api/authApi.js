@@ -25,3 +25,14 @@ export const loginUser = createAsyncThunk(
 );
 
 export const logoutUser = createAsyncThunk("auth/logoutUser", () => {});
+
+export const updateUser = createAsyncThunk(
+  "user/updateUser",
+  async (userDetails) => {
+    const response = await axios.put(
+      `${config.Backend_URL}user/update`,
+      userDetails
+    );
+    return response.data;
+  }
+);
