@@ -29,10 +29,20 @@ connection.once("open", () => {
 });
 mongoose.set("returnOriginal", false);
 
+const orderRouter = require("./routes/order");
+const carForSellRouter = require("./routes/carForSell");
+const itemRouter = require("./routes/item");
+const serviceRouter = require("./routes/service");
+const appointmentRouter = require("./routes/appointment");
 const carRouter = require("./routes/car");
 const userRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
 
+app.use("/order", orderRouter);
+app.use("/car-for-sell", carForSellRouter);
+app.use("/item", itemRouter);
+app.use("/service", serviceRouter);
+app.use("/appointment", appointmentRouter);
 app.use("/car", carRouter);
 app.use("/user", userRouter);
 app.use("/auth", authRouter);

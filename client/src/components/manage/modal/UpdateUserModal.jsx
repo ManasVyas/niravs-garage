@@ -1,51 +1,44 @@
-import { Autocomplete, Button, TextField } from "@mui/material";
-import Backdrop from "@mui/material/Backdrop";
-import Box from "@mui/material/Box";
-import Fade from "@mui/material/Fade";
-import Modal from "@mui/material/Modal";
-import Typography from "@mui/material/Typography";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import React from "react";
+import {
+  Autocomplete,
+  Backdrop,
+  Box,
+  Button,
+  Fade,
+  Modal,
+  TextField,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { updateUser } from "../../../api/authApi";
 import Swal from "sweetalert2";
+import { fetchUsers, updateUser } from "../../../api/userApi";
 
-export const UpdateUserModal = ({
-  open,
-  handleClose,
-  _id,
-  email,
-  role = ``,
-  number,
-}) => {
+export const UpdateUserModal = ({ handleClose, open, user }) => {
   const isMobile = useMediaQuery("(min-width:768px)");
   const dispatch = useDispatch();
+  useEffect(() => {}, [user]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    let updatedUser = {};
-    if (password) {
-      updatedUser = {
-        _id,
-        userName: email,
-        password: data.get("password"),
-        role: data.get("role"),
-        contactNumber: data.get("contactNumber"),
-      };
-    } else {
-      updatedUser = {
-        _id,
-        userName: email,
-        role: data.get("role"),
-        contactNumber: data.get("contactNumber"),
-      };
-    }
-    const response = await dispatch(updateUser(updatedUser));
-    if (response.payload) {
-      Swal.fire("SUCCESS!", "User Updated Successfully!", "success");
-    } else {
-      Swal.fire("ERROR!", "Update Unsuccessful. Please Try Again!", "error");
+    const updatedUser = await updateUser({
+      _id: user._id,
+      userName: user.userName,
+      role: data.get("role"),
+      contactNumber: user.contactNumber,
+    });
+    if (updatedUser.success) {
+      const response = await dispatch(fetchUsers());
+      if (response.payload) {
+        Swal.fire("SUCCESS!", "User Updated Successfully!", "success");
+      } else {
+        Swal.fire(
+          "ERROR!",
+          "Unable to Update User. Please Try Again!",
+          "error"
+        );
+      }
     }
     handleClose();
   };
@@ -100,18 +93,8 @@ export const UpdateUserModal = ({
               name="email"
               autoComplete="email"
               type="email"
-              value={email}
+              value={user.userName}
               disabled
-            />
-            <TextField
-              margin="normal"
-              fullWidth
-              id="password"
-              label="Password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              autoFocus
             />
             <Autocomplete
               margin="normal"
@@ -119,6 +102,7 @@ export const UpdateUserModal = ({
               id="role"
               disablePortal
               options={roles}
+              defaultValue={{ label: user.role, value: user.role }}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -130,17 +114,6 @@ export const UpdateUserModal = ({
                   autoComplete="role"
                 />
               )}
-              defaultValue={role}
-            />
-            <TextField
-              margin="normal"
-              fullWidth
-              id="contactNumber"
-              label="Contact Number"
-              name="contactNumber"
-              autoComplete="contactNumber"
-              type="number"
-              defaultValue={number}
             />
             <Button
               type="submit"

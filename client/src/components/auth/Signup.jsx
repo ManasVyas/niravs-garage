@@ -48,6 +48,10 @@ export const Signup = () => {
       label: "Customer",
       value: "customer",
     },
+    {
+      label: "Mechanic",
+      value: "mechanic",
+    },
   ];
 
   return (

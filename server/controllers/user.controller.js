@@ -27,6 +27,17 @@ const findUsers = async (req, res) => {
   }
 };
 
+const findUserById = async (req, res) => {
+  try {
+    const data = await userDao.findUserById(req.params.id);
+    if (!data)
+      return res.status(404).json({ success: false, msg: "User not found!" });
+    res.status(200).json({ success: true, data });
+  } catch (error) {
+    res.status(500).json({ success: false, msg: error.message });
+  }
+};
+
 const updateUser = async (req, res) => {
   try {
     const user = await userDao.findUserById(req.body._id);
@@ -62,6 +73,7 @@ const deleteUser = async (req, res) => {
 const userController = {
   addUser,
   findUsers,
+  findUserById,
   updateUser,
   deleteUser,
 };

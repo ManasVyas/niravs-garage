@@ -35,6 +35,14 @@ const pages = [
     route: "/about",
     name: "About",
   },
+  {
+    route: "/manage",
+    name: "Manage",
+  },
+  {
+    route: "/showroom",
+    name: "Showroom",
+  },
 ];
 
 const settings = [
